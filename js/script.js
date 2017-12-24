@@ -7,14 +7,11 @@ $(document).ready(function(){
   document.getElementsByClassName("range-slider__range")[0].value = 0;
 
   function setVideoInNewRate(){ 
-    var rate = document.getElementsByClassName("range-slider__range")[0].value; // nie do konca number
+    var rate = document.getElementsByClassName("range-slider__range")[0].value; 
     var n = Number(rate);
-    var stringNumber = n.toFixed(1); // metoda obiektu number a nie Math
+    var stringNumber = n.toFixed(1); 
     var number = Number(stringNumber);
     rate = number;
-        //rum = Number(mum);
-      //rateValueBtn.value=range[0].value;
-      //vid.playbackRate = 1.0;
     clearInterval(intervalRewind);
         if(rate >0){
           vid.playbackRate = rate;
@@ -27,7 +24,6 @@ $(document).ready(function(){
                vid.pause();
             }
             else {
-          //rum = Number(mum);
               vid.currentTime += rate /30 ;
               console.log(rate);
             }
@@ -36,9 +32,7 @@ $(document).ready(function(){
         else{
           vid.pause();
         }
-        
-        //console.log(r);
-        //v.load();
+
   }
 
   var rangeSlider = function(){
@@ -55,31 +49,22 @@ $(document).ready(function(){
 
       range.on('input', function(){
         $(this).next(value).html(this.value);
-        rateValueInput.value=range[0].value;
         
       });
       
     });
 
   };
-
+  
   rangeSlider();
 
-//rateValueBtn.value = document.getElementsByClassName("range-slider__range")[0].value;
-/*
-$(vid).on('play',function(){
-    vid.playbackRate = 1.0;
-    clearInterval(intervalRewind);
-});
-*/
   $(vid).on('pause',function(){
-    vid.playbackRate = 1.0;
-    clearInterval(intervalRewind);
+    if(document.getElementsByClassName("range-slider__range")[0].value<0){
+      vid.playbackRate = 1.0;
+      clearInterval(intervalRewind);
+  }
   });
 
-  $("#speed").click(function() { // button function for 4x fast speed forward
-    vid.playbackRate = 4.0;
-  });
 
 
   $("#goBack").click(function() { // button function for rewind
@@ -139,33 +124,70 @@ $(vid).on('play',function(){
 
   window.onload = resetVisualEffects;// because browser remembers values from before refreshing the page
   
-  $("aside input").on('change',function() {applyVisualEffects(vidJQ);} );// jednak mozna wstawic referencjwe a nie uzywac tylko jednej wlasnosci obiektu 
+  $("aside input").on('change',function() {applyVisualEffects(vidJQ);} );
 
   var canvas = document.getElementById('canvas');
-  //var canvasJQ = $("canvas");
-  //var currentScreenShot = new Image(w,h);
-    // Get a handle on the 2d context of the canvas element
   var context = canvas.getContext('2d');
-    // Define some vars required later
+  // Define some vars required later
   var w, h, ratio;
     
+  function resize(){
+    if(window.innerWidth> 768){
+      document.getElementsByClassName("range-slider__range")[0].min = -2;
+    }
+    if(window.innerWidth<= 768){
+      document.getElementsByClassName("range-slider__range")[0].min = 0;
+    } 
+    if(window.innerWidth>656){
+      vid.width= 640;  
+      vid.videoWidth=640;
+    }
+    if(window.innerWidth<=656){
+      vid.width= 570;  
+      vid.videoWidth=570;
+    }
+    if(window.innerWidth<=590){
+      vid.width= 470;
+      vid.videoWidth=470;  
+    }
+    if(window.innerWidth<=500){
+      vid.width= 390;  
+      vid.videoWidth=390;
+    }
+    if(window.innerWidth<=410){
+      vid.width= 320;  
+      vid.videoWidth=320;
+    }
+
+  }
+  window.addEventListener("resize",resize);
+
+
     // Add a listener to wait for the 'loadedmetadata' state so the video's dimensions can be read
   vid.addEventListener('loadedmetadata', function() {
+    resize();
+    console.log(canvas.width);
+    console.log(canvas.height);
     // Calculate the ratio of the video's width to height
     ratio = vid.videoWidth / vid.videoHeight;
     // Define the required width as 100 pixels smaller than the actual video's width
-    w = vid.videoWidth - 100;
+    w = vid.width - 100;
     // Calculate the height based on the video's width and the ratio
     h = parseInt(w / ratio, 10);
     // Set the canvas width and height to the values just calculated
     canvas.width = w;
-    canvas.height = h;      
+    canvas.height = h; 
+    console.log(w);
+    console.log(h);
+
+
   }, false);
     
-    
-    // Define the size of the rectangle that will be filled (basically the entire element)
+  
+  // Define the size of the rectangle that will be filled (basically the entire element)
   // Takes a snapshot of the video
   function snap() {
+
     context.fillRect(0, 0, w, h);
     // Grab the image from the video
     context.drawImage(vid, 0, 0, w, h);
@@ -173,7 +195,6 @@ $(vid).on('play',function(){
     applyVisualEffects(canvas);
     
   }
-
 
   var snapBtn = document.getElementById('snapBtn');
   var saveBtn = document.getElementById('saveBtn');
@@ -187,29 +208,12 @@ $(vid).on('play',function(){
     var tempCanvas = canvas[0];//just to hold canvas[0] - canvas DOM Node
     var newCanvasDOMNode = newCanvas[0];
     var ctx = newCanvasDOMNode.getContext('2d');
-    // Define the size of the rectangle that will be filled (basically the entire element)
     ctx.fillRect(0, 0, w, h);
-    //newCanvasDOMNode = canvas[0];
     ctx.drawImage(tempCanvas, 0, 0, w, h);
-    // Grab the image from the video
     applyVisualEffects(newCanvas);
-    var DivWithScreenShot = $("<div></div>").css("padding","10px").append(newCanvas);// do apend nie musze miec jq colexton ?!
+    var DivWithScreenShot = $("<div></div>").css("padding","10px").append(newCanvas);
     saveDiv.append(DivWithScreenShot);
 
   }
      
 });
-
-
-// nie robie zapisu samemu na serwer czy na disk bo to w sumie nie potzrzebne - jak zapisze 
-// jako zdjecie to przegladarka ma wpdowana opcje zapisu
-//po za tym to jest trudne
-// trzeba mieci video na tym samym serwezrze uzyc localhost na gruncie
-// xampie albi github 
-// nie wiem czy to wszystko zadzila i jak to zrobic 
-// stranie mal materialow jak jak to zrobic trzeba samemu duzo pomyslec
-// kiedy to wroce i to zrobie jako ciekawe zadania
-//And the file needs to come from a web server, which is the same one the web page itself is on 
-
-
-//document.getElementsByClassName("range-slider__range")[0].value

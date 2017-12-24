@@ -2,11 +2,7 @@
 body {
   margin: 0;
   padding: 20px 0;
-  font-family: 'Kurale', serif;
-  /*
-  background-image: url("http://ak8.picdn.net/shutterstock/videos/2715908/thumb/2.jpg");
-  background-size: cover;
-  */ }
+  font-family: 'Kurale', serif; }
 
 * {
   box-sizing: border-box; }
@@ -18,12 +14,14 @@ body {
 
 #goBack {
   display: block;
-  padding: 4px; }
+  padding: 4px;
+  margin-bottom: 10px; }
 
 #rateValueBtn {
   display: block;
   margin: auto;
-  padding: 4px; }
+  padding: 4px;
+  margin-top: 10px; }
 
 .sliderInput {
   height: 20;
