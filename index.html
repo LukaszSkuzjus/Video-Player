@@ -3,15 +3,56 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Canvas Video Player</title>
+    <title>Video Player</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="css/css.css">
   </head>
   <body>
 
-    <button id="stopBtn">STOP</button>
-    <input id="rateValue" placeholder='0.7'   />
+    <div class="videoAndEffects">
+      <div class="videoAndGoBackBtn">
+        <video id="vid"  controls="controls">
+          <source src="./video/big_buck_bunny.mp4" type="video/mp4">
+        </video>
+        <button id="goBack">go back 5 sec</button>
+      </div>
+
+      <aside>
+        <div>
+          <label>
+            <strong>Blur</strong><code>blur(<span id="blur-val">0</span>px);</code>
+          </label>
+          <input id="blur" type="range" min="0" max="20" step="1" value="0" />
+        </div>
+        <div>
+          <label><strong>Saturation</strong><code>saturate(<span id="saturate-val">1</span>);</code></label>
+          <input id="saturate" type="range" min="0" max="5" step="0.1" value="1"/>
+        </div>
+        <div>
+          <label><strong>Hue</strong><code>hue-rotate(<span id="hue-val">0</span>deg);</code></label>
+          <input id="hue" type="range" min="0" max="360" step="1" value="0" />
+        </div>
+        <div>
+          <label><strong>Brightness</strong><code>brightness(<span id="brightness-val">0.9</span>);</code></label>
+          <input id="brightness" type="range" min="0" max="1" step="0.05" value="0.9" />
+        </div>
+        <div>
+          <label><strong>Contrast</strong><code>contrast(<span id="contrast-val">1</span>);</code></label>
+          <input id="contrast" type="range" min="0" max="5" step="0.05" value="1" />
+        </div>
+        <div>
+          <label><strong>Invert</strong><code>invert(<span id="invert-val">0</span>);</code></label>
+          <input id="invert" type="range" min="0" max="1" step="0.05" value="0" />
+        </div>
+        <div>
+          <label><strong>Sepia</strong><code>sepia(<span id="sepia-val">0</span>);</code></label>
+          <input id="sepia" type="range" min="0" max="1" step="0.05" value="0" />
+        </div>
+      </aside>
+
+    </div>
+
     <button id="rateValueBtn">Set the new rate</button>
 
 
@@ -20,101 +61,19 @@
       <span class="range-slider__value">0</span>
     </div>
 
+    <div class="buttonsAndScreenshotDiv">
+      <div class="buttonsDiv">
+        <button id="snapBtn" >Take screenshot</button>
+        <button id="saveBtn">Save image on the page </button>
+      </div>
+      <canvas id ="canvas"></canvas>
+   </div>
     
-    <button id="goBack">go back 5 sec</button>
-
-  <aside>
-  <div>
-    <label>
-      <strong>Blur</strong><code>-webkit-filter:blur(<span id="blur-val">0</span>px);</code>
-    </label>
-    <input id="blur" type="range" min="0" max="20" step="1" value="0" />
-  </div>
-  <div>
-    <label><strong>Saturation</strong><code>-webkit-filter:saturate(<span id="saturate-val">1</span>);</code></label>
-    <input id="saturate" type="range" min="0" max="5" step="0.1" value="1"/>
-  </div>
-  <div>
-    <label><strong>Hue</strong><code>-webkit-filter:hue-rotate(<span id="hue-val">0</span>deg);</code></label>
-    <input id="hue" type="range" min="0" max="360" step="1" value="0" />
-  </div>
-  <div>
-    <label><strong>Brightness</strong><code>-webkit-filter:brightness(<span id="brightness-val">0</span>);</code></label>
-    <input id="brightness" type="range" min="0" max="1" step="0.05" value="0.9" />
-  </div>
-  <div>
-    <label><strong>Contrast</strong><code>-webkit-filter:contrast(<span id="contrast-val">0</span>);</code></label>
-    <input id="contrast" type="range" min="0" max="5" step="0.05" value="1" />
-  </div>
-  <div>
-    <label><strong>Invert</strong><code>-webkit-filter:invert(<span id="invert-val">0</span>);</code></label>
-    <input id="invert" type="range" min="0" max="1" step="0.05" value="0" />
-  </div>
-  <div>
-    <label><strong>Sepia</strong><code>-webkit-filter:sepia(<span id="sepia-val">0</span>);</code></label>
-    <input id="sepia" type="range" min="0" max="1" step="0.05" value="0" />
-  </div>
-  
-    <a class="twitter"  href="https://twitter.com/bennettfeely">@bennettfeely</a>
-  
-</aside>
-
-
-    <video id="vid" width="400" height="300" controls="controls">
-      <source src="https://www.quirksmode.org/html5/videos/big_buck_bunny.mp4" type="video/mp4">
-      <!-- <source src="https://www.quirksmode.org/html5/videos/big_buck_bunny.webm" type="video/webm">
-      <source src="https://www.quirksmode.org/html5/videos/big_buck_bunny.ogv" type="video/ogg"> -->
-    </video>
-    <canvas id ="canvas"></canvas>
-
-    <button id="snapBtn" >Take screenshot</button>
-    <button id="saveBtn">save image on the page </button>
 
     <div id = "saveDiv">
-      <canvas id ="cc"></canvas>
+      
     </div>
 
-<script>
-  var vid = document.getElementById('vid');
-    var canvas = document.getElementById('canvas');
-    // Get a handle on the 2d context of the canvas element
-    var context = canvas.getContext('2d');
-    // Define some vars required later
-    var w, h, ratio;
-    
-    // Add a listener to wait for the 'loadedmetadata' state so the video's dimensions can be read
-    vid.addEventListener('loadedmetadata', function() {
-      // Calculate the ratio of the video's width to height
-      ratio = vid.videoWidth / vid.videoHeight;
-      // Define the required width as 100 pixels smaller than the actual video's width
-      w = vid.videoWidth - 100;
-      // Calculate the height based on the video's width and the ratio
-      h = parseInt(w / ratio, 10);
-      // Set the canvas width and height to the values just calculated
-      canvas.width = w;
-      canvas.height = h;      
-    }, false);
-    
-    // Takes a snapshot of the video
-    function snap() {
-      // Define the size of the rectangle that will be filled (basically the entire element)
-      context.fillRect(0, 0, w, h);
-      // Grab the image from the video
-      context.drawImage(vid, 0, 0, w, h);
-    }
-
-
-    var snapBtn = document.getElementById('snapBtn');
-    var saveBtn = document.getElementById('saveBtn');
-    snapBtn.addEventListener('click',snap);
-    //saveBtn.addEventListener('click',save);
-
-    
-    
-
-
-</script>
-<input id = "videoURL" placeholder="enter video url" />
 
 
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
